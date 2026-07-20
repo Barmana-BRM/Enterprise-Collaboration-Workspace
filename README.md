@@ -1,374 +1,185 @@
+<div align="center">
 
+# 🚀 Enterprise Collaboration Workspace (Huly Platform)
 
-## About
+**A modular collaboration platform spanning chat, projects, CRM, HRM and applicant tracking.**
 
-The Huly Platform is a robust framework designed to accelerate the development of business applications, such as CRM systems.
-This repository includes several applications, such as Chat, Project Management, CRM, HRM, and ATS.
-Various teams are building products on top of the Platform, including [Huly](https://huly.io) and [TraceX](https://tracex.co).
+<img alt="Languages" src="https://img.shields.io/badge/docs-English_·_فارسی_·_العربية-2563eb?style=for-the-badge">
+<img alt="Architecture" src="https://img.shields.io/badge/architecture-Mermaid-7c3aed?style=for-the-badge">
+<img alt="Organization" src="https://img.shields.io/badge/org-Barmana--BRM-0f172a?style=for-the-badge">
 
+[English](#english) · [فارسی](#فارسی) · [العربية](#العربية) · [Build Guide](./BUILD.md)
 
+</div>
 
-## Self-Hosting
+> [!IMPORTANT]
+> **Verified repository status:** Large upstream monorepo; substantial build resources required
 
-If you're primarily interested in self-hosting Huly without the intention to modify or contribute to its development, please use [huly-selfhost](https://github.com/hcengineering/huly-selfhost).
-This project offers a convenient method to host Huly using `docker`, designed for ease of use and quick setup. Explore this option to effortlessly enjoy Huly on your own server.
+## 🧭 Architecture
 
-## Activity
-
-![Alt](https://repobeats.axiom.co/api/embed/c42c99e21691fa60ea61b5cdf11c2e0647621534.svg 'Repobeats analytics image')
-
-## API Client
-
-If you want to interact with Huly programmatically, check out our [API Client](https://github.com/hcengineering/huly.core/tree/main/packages/api-client) documentation. The API client provides a typed interface for all Huly operations and can be used to build integrations and custom applications.
-
-You can find API usage examples in the [Huly examples](https://github.com/hcengineering/huly-examples) repository.
-
-## Changelog
-
-For detailed information about changes, improvements, and bug fixes in each version, see our [Changelog](./changelog.md).
-
-## Versions
-
-The Huly Platform uses two types of version tags to distinguish between production-ready and development releases:
-
-- **Production Versions (`v*`)** - Stable releases for end users
-  - Example: `v0.7.310`, `v0.7.307`, `v0.6.501`
-  - These versions are recommended for production deployments
-  - Suitable for self-hosted installations
-  - Published with release notes on [GitHub Releases](https://github.com/hcengineering/platform/releases)
-
-- **Development Versions (`s*`)** - Pre-release builds for developers
-  - Example: `s0.7.313`, `s0.7.292`, `s0.7.288`
-  - Used for development and testing purposes
-  - May contain experimental features or bug fixes
-  - Not recommended for production use
-
-## Architecture
-
-For detailed information about the platform architecture, services, and their interactions, see our [Architecture Overview](./ARCHITECTURE_OVERVIEW.md).
-
-## Table of Contents
-
-- [Huly Platform](#huly-platform)
-  - [About](#about)
-  - [Self-Hosting](#self-hosting)
-  - [Activity](#activity)
-  - [API Client](#api-client)
-  - [Changelog](#changelog)
-  - [Versions](#versions)
-  - [Architecture](#architecture)
-  - [Table of Contents](#table-of-contents)
-  - [Pre-requisites](#pre-requisites)
-  - [Verification](#verification)
-  - [Branches \& Contributing](#branches--contributing)
-  - [Setup dev environment](#setup-dev-environment)
-  - [Fast start](#fast-start)
-  - [Installation](#installation)
-  - [Build and run](#build-and-run)
-  - [Run in development mode](#run-in-development-mode)
-  - [Update project structure and database](#update-project-structure-and-database)
-  - [Troubleshooting](#troubleshooting)
-  - [Build \& Watch](#build--watch)
-  - [Tests](#tests)
-    - [Unit tests](#unit-tests)
-    - [UI tests](#ui-tests)
-  - [Package publishing](#package-publishing)
-  - [Additional testing](#additional-testing)
-  - [WSL build guide](#wsl-build-guide)
-
-## Pre-requisites
-
-- Before proceeding, ensure that your system meets the following requirements:
-  - [Node.js](https://nodejs.org/en/download/) (v20.11.0 is required)
-  - [Docker](https://docs.docker.com/get-docker/)
-  - [Docker Compose](https://docs.docker.com/compose/install/)
-
-## Verification
-
-To verify the installation, perform the following checks in your terminal:
-
-- Ensure that the `docker` commands are available:
-
-```bash
-docker --version
-docker compose version
+```mermaid
+flowchart LR
+  WEB[Web clients] --> GW[Platform gateway]
+GW --> WS[Workspace services]
+WS --> PM[Projects]
+WS --> CHAT[Chat]
+WS --> CRM[CRM/HR/ATS]
+PM --> DATA[(Data/search/storage)]
+CHAT --> DATA
+CRM --> DATA
 ```
 
-## Branches & Contributing
+---
 
-- The `main` branch is the default branch used for production deployments.
-  Changes to this branch are made from the `staging` branch once a version is ready for community use.
+## English
 
-- The `staging` branch is used for pre-release testing.
-  It is stable enough for testing but not yet ready for production deployment.
+### 📌 Overview
 
-- The `develop` branch is used for development and is the default branch for contributions.
+A modular collaboration platform spanning chat, projects, CRM, HRM and applicant tracking.
 
-We periodically merge `develop` into `staging` to perform testing builds. Once we are satisfied with the build quality in our pre-release deployment, we merge changes into `main` and release a new version to the community.
+This README is based on the current public source, dependency manifests, container files and runnable entry points. Implemented functionality is separated from roadmap claims, and known limitations are recorded instead of being hidden behind generic setup instructions.
 
-## Setup dev environment
+### ✨ Core capabilities
 
-### To initialise the communication submodule
+- Unified workspace/chat
+- Project and document collaboration
+- CRM/HR/ATS apps
+- Typed API and Docker development
 
-```bash
-git submodule init
-git submodule update
-```
+### 🧱 Technology stack
 
-### To update the communication submodule
+| Layer | Technology |
+|---|---|
+| Monorepo | Microsoft Rush, TypeScript |
+| Runtime | Node.js 20.11 |
+| Infrastructure | Docker Compose |
+| Services | MongoDB, Elasticsearch, MinIO and platform services |
 
-```bash
-git submodule update
-```
+### 🔄 Operating model
 
-### Authentication
+1. Prepare the runtime and external services documented in [BUILD.md](./BUILD.md).
+2. Configure secrets in local environment files or a secret manager; never commit them.
+3. Start infrastructure and backend services before the user interface in multi-service projects.
+4. Validate health checks, migrations, model files and provider connectivity.
+5. Run tests and domain-specific validation before producing a release artifact.
 
-This project uses GitHub Packages for dependency management. To successfully download dependencies, you need to generate a GitHub personal access token and log in to npm using that token.
+### 🔐 Security, quality and limitations
 
-Follow these steps:
+- Build can require tens of GB and high memory
+- Use upstream self-host repo for deployment
 
-1. Generate a GitHub Token:
-- Log in to your GitHub account
-- Go to **Settings** > **Developer settings** > **Personal access tokens** (https://github.com/settings/personal-access-tokens)
-- Click **Generate new token**
-- Select the required scopes (at least `read:packages`)
-- Generate the token and copy it
+### 🛠 Build and deployment
 
-2. Authenticate with npm:
-```bash
-npm login --registry=https://npm.pkg.github.com
-```
+Use **[BUILD.md](./BUILD.md)** for verified prerequisites, development commands, production build steps, tests and troubleshooting.
 
-When prompted, enter your GitHub username, use the generated token as your password
+### 📄 Attribution and license
 
+This repository contains the Huly Platform from HC Engineering. Preserve upstream copyright, license, branding and contributors.
 
-## Fast start
+---
 
-```bash
-sh ./scripts/fast-start.sh
-```
+## فارسی
 
-## Installation
+### 📌 معرفی پروژه
 
-You need Microsoft's [rush](https://rushjs.io) to install the application.
+پلتفرم همکاری ماژولار شامل چت، پروژه، CRM، HRM و رهگیری متقاضی.
 
-1. Install Rush globally using the command:
+این مستند بر اساس سورس عمومی فعلی، فایل‌های وابستگی، تنظیمات کانتینر و نقاط ورود قابل مشاهده تهیه شده است. قابلیت‌های پیاده‌سازی‌شده از موارد نقشه راه جدا شده‌اند و محدودیت‌های واقعی Build به‌صورت شفاف ثبت شده‌اند.
 
-```bash
-npm install -g @microsoft/rush
-```
+### ✨ قابلیت‌های اصلی
 
-2. Navigate to the repository root and run the following commands:
+- فضای کاری و چت
+- همکاری پروژه و سند
+- برنامه‌های CRM/HR/ATS
+- API تایپ‌شده و Docker
 
-```bash
-rush install
-rush build
-```
+### 🧱 پشته فناوری
 
-Alternatively, you can just execute:
+| Layer | Technology |
+|---|---|
+| Monorepo | Microsoft Rush, TypeScript |
+| Runtime | Node.js 20.11 |
+| Infrastructure | Docker Compose |
+| Services | MongoDB, Elasticsearch, MinIO and platform services |
 
-```bash
-sh ./scripts/presetup-rush.sh
-```
+### 🔄 روند اجرا
 
-## Build and run
+۱. پیش‌نیازها و سرویس‌های بیرونی مندرج در [BUILD.md](./BUILD.md) را آماده کنید.  
+۲. کلیدها را فقط در فایل محیطی خارج از Git یا Secret Manager نگه دارید.  
+۳. در پروژه چندسرویسی، ابتدا دیتابیس، صف و بک‌اند و سپس رابط کاربری را اجرا کنید.  
+۴. Health Check، Migration، فایل مدل و اتصال Providerها را بررسی کنید.  
+۵. پیش از انتشار، تست فنی و اعتبارسنجی تخصصی حوزه را انجام دهید.
 
-Development environment setup requires Docker to be installed on system.
+### 🔐 امنیت و محدودیت
 
-Support is available for both amd64 and arm64 containers on Linux and macOS.
+- نسخه Runtime و Dependencyها را با Lockfile تثبیت کنید.
+- اطلاعات شخصی، فایل آپلودی، کلید API و داده واقعی نباید وارد مخزن عمومی شود.
+- ادعاهای دقت، امنیت یا آمادگی Production باید در محیط هدف دوباره ارزیابی شوند.
+- محدودیت‌های اختصاصی پروژه در بخش انگلیسی بالا و `BUILD.md` ثبت شده‌اند.
 
-```bash
-cd ./dev/
-rush build    # Will build all the required packages.
-# rush rebuild  # could be used to omit build cache.
-rush bundle   # Will prepare bundles.
-rush package  # Will build all webpack packages.
-rush validate # Will validate all sources with typescript and generate d.ts files required for ts-node execution.
-rush svelte-check # Optional. svelte files validation using svelte-check.
-rush docker:build   # Will build Docker containers for all applications in the local Docker environment.
-rush docker:up # Will set up all the containers
-```
+### 🛠 نصب و Build
 
-Be aware `rush docker:build` will automatically execute all required phases like build, bundle, package.
+راهنمای کامل و دستورات قابل کپی در **[BUILD.md](./BUILD.md)** قرار دارد.
 
-> **Note:** For resource-constrained machines, you can use the minified variants `rush docker:min` and `rush docker:up:min` to build and run only the required services (excludes hulypulse, redis, process, backup, rating, preview, link-preview, elastic, fulltext, payment, stats, print, sign, hulygun, hulykvs).
+### 📄 مجوز و مالکیت
 
-Alternatively, you can just execute:
+فایل `LICENSE`، اعتبار توسعه‌دهندگان اصلی و مجوز کتابخانه‌های ثالث باید حفظ شود. در پروژه‌های upstream یا fork، مالکیت به سازمان بارمانا منتقل نمی‌شود.
 
-```bash
-sh ./scripts/build.sh
-```
+---
 
-By default, Docker volumes named dev_db, dev_elastic, and dev_files will be created for the MongoDB, Elasticsearch, and MinIO instances.
+## العربية
 
-Add the following lines to your hosts file:
+### 📌 نظرة عامة
 
-- **macOS / Linux:** `/etc/hosts`
-- **Windows:** `C:\Windows\System32\drivers\etc\hosts`
+منصة تعاون معيارية تشمل المحادثة والمشاريع وCRM وHRM وتتبع المتقدمين.
 
-```plain
-127.0.0.1 huly.local
-::1 huly.local
-```
+أُعد هذا التوثيق اعتماداً على المصدر العام الحالي وملفات التبعيات والحاويات ونقاط التشغيل المتاحة. وهو يميز بين الوظائف المنفذة وخارطة الطريق ويذكر قيود البناء الفعلية بوضوح.
 
-Accessing the URL <http://huly.local:8087> will lead you to the app in development mode.
+### ✨ القدرات الأساسية
 
-Limitations:
+- مساحة عمل ومحادثة
+- تعاون مشاريع ومستندات
+- تطبيقات CRM/HR/ATS
+- API typed وDocker
 
-- Local installation does not support sending emails, thus disabling functionalities such as password recovery and email notifications.
+### 🧱 التقنيات
 
-## Run in development mode
+| Layer | Technology |
+|---|---|
+| Monorepo | Microsoft Rush, TypeScript |
+| Runtime | Node.js 20.11 |
+| Infrastructure | Docker Compose |
+| Services | MongoDB, Elasticsearch, MinIO and platform services |
 
-Development mode allows for live reloading and a smoother development process.
+### 🔄 مسار التشغيل
 
-```bash
-cd dev/prod
-rush validate
-rushx dev-server
-```
+١. جهز المتطلبات والخدمات الخارجية الواردة في [BUILD.md](./BUILD.md).  
+٢. احتفظ بالأسرار في ملف بيئة غير متتبع أو مدير أسرار.  
+٣. شغّل قواعد البيانات والطوابير والخلفية قبل الواجهة في الأنظمة متعددة الخدمات.  
+٤. تحقق من الصحة والترحيلات وملفات النماذج واتصال المزوّدين.  
+٥. نفذ الاختبارات والتحقق المتخصص قبل إصدار نسخة للنشر.
 
-Then go to <http://localhost:8080>
+### 🔐 الأمان والقيود
 
-Select "Sign up" on the right panel and click the "Sign up with password" link at the bottom. Enter the new user's credentials, then proceed to create a workspace for them.
+- ثبّت إصدارات التشغيل والتبعيات بملفات القفل.
+- لا تضع بيانات شخصية أو ملفات مرفوعة أو مفاتيح API في مستودع عام.
+- أعد التحقق من ادعاءات الدقة والأمان والجاهزية في بيئة الهدف.
+- القيود الخاصة بالمشروع موثقة في القسم الإنجليزي و`BUILD.md`.
 
-## Update project structure and database
+### 🛠 البناء والنشر
 
-If the project's structure is updated, it may be necessary to relink and rebuild the projects.
+توجد التعليمات الكاملة والأوامر القابلة للنسخ في **[BUILD.md](./BUILD.md)**.
 
-```bash
-rush update
-rush build
-```
+### 📄 النسب والترخيص
 
-## Troubleshooting
+يجب الحفاظ على `LICENSE` وحقوق المطورين الأصليين وتراخيص المكونات الخارجية. وجود نسخة أو fork لا ينقل ملكية المصدر إلى Barmana-BRM.
 
-If a build fails, but the code is correct, try to delete the [build cache](https://rushjs.io/pages/maintainer/build_cache/) and retry.
 
-```bash
-# from the project root
-rm -rf common/temp/build-cache
-```
 
-## Build & Watch
+---
 
-For development purpose `rush build:watch` action could be used.
+<div align="center">
 
-It includes build and validate phases in watch mode.
+Made documentation-ready for the public portfolio of **Barmana-BRM**
 
-## Tests
-
-### Unit tests
-
-```bash
-rush test # To execute all tests
-
-rushx test # For individual test execution inside a package directory
-```
-
-### UI tests
-
-```bash
-cd ./tests
-rush build
-rush bundle
-rush docker:build
-## creates test Docker containers and sets up test database
-./prepare.sh
-## runs UI tests
-rushx uitest
-```
-
-To execute tests in the development environment, please follow these steps:
-
-```bash
-cd ./tests
-./create-local.sh ## use ./restore-local.sh if you only want to restore the workspace to a predefined initial state for sanity.
-cd ./sanity
-rushx dev-uitest # To execute all tests against the development environment.
-rushx dev-debug -g 'pattern' # To execute tests in debug mode with only the matching test pattern.
-```
-
-## Package publishing
-
-```bash
-node ./common/scripts/bump.js -p projectName
-```
-
-## Additional testing
-
-This project is tested with BrowserStack.
-
-## WSL build guide
-
-This guide describes the nuances of building and running the application from source code located on your NTFS drive, which is accessible from both Windows and WSL.
-
-### Prerequisites
-
-#### Disk Space Requirements
-
-Ensure you have sufficient disk space available:
-- A fully deployed local application in clean Docker will consume slightly more than **35 GB** of WSL virtual disk space
-- The application folder after build (sources + artifacts) will occupy **4.5 GB**
-
-If there's insufficient space on your system drive (usually `C:\`), you can change the virtual disk location in Docker Settings → Resources → Advanced.
-
-#### Docker WSL Integration
-
-Make sure Docker is accessible from WSL:
-
-1. Go to Docker Settings → Resources → Advanced → WSL Integration
-2. Select the distribution where you'll be building and running the application
-3. Verify integration works by running this command in WSL:
-   ```bash
-   docker run hello-world
-   ```
-
-### Common Issues and Solutions
-
-#### Git Line Endings on Windows
-
-Windows Git often automatically replaces line endings. Since most build scripts are `.sh` files, ensure your Windows checkout doesn't break them.
-
-**Solution options:**
-- Checkout from WSL instead of Windows
-- Configure Git on Windows to disable auto-replacement:
-  ```bash
-  git config --global core.autocrlf false
-  ```
-  This disables auto-replacement for all repositories on your machine.
-
-#### Elevated Privileges in WSL
-
-Some commands in the instructions require elevated privileges when working in WSL. If you're using Ubuntu distribution, prefix commands with `sudo`:
-
-```bash
-sudo npm install -g @microsoft/rush
-```
-
-#### WSL Configuration
-
-If the source code is located on a Windows NTFS drive, then edit the `/etc/wsl.conf` file in WSL (e.g., `sudo nano /etc/wsl.conf`) and add the following content if it doesn't exist:
-
-```ini
-[automount]
-enabled = true
-root = /mnt/
-options = "metadata,umask=22,fmask=11"
-
-[interop]
-appendWindowsPath = false
-```
-
-However, we recommend storing the repository on a WSL disk, as this dramatically improves build and maintenance operations.
-
-### Running the Application
-
-After these preparations, the build instructions should work without issues.
-
-#### Port Conflicts
-
-When starting the application (`rush docker:up`), some network ports in Windows might be occupied. You can fix port mapping in the `\dev\docker-compose.yaml` file.
-
-**Important:** Depending on which port you change, you'll need to:
-1. Find what's using that port
-2. Update the new address in the corresponding service configuration
+</div>
